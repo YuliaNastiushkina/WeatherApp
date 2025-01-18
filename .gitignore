@@ -1,0 +1,7 @@
+## macOS ##
+### Apple Finder's file
+.DS_Store
+
+### Xcode
+xcuserdata/
+build/
