@@ -10,6 +10,9 @@ struct Request {
     ///     - `NSError` if the API key is missing.
     ///     - `URLError` if the constructed URL is invalid.
     ///     - An error from `URLSession` or `JSONDecoder` during the network request or decoding.
+    ///     - `URLError(.badServerResponse)` if:
+    ///         - The server response cannot be cast to `HTTPURLResponse`.
+    ///         - The HTTP status code of the response is outside the range 200–299.
     func getWeather(for city: String) async throws -> WeatherModel {
         guard let apiKey = getAPIKey() else {
             throw NSError(domain: "WeatherApp", code: -1, userInfo: [NSLocalizedDescriptionKey: "API Key is missing"])
@@ -21,7 +24,11 @@ struct Request {
             throw URLError(.badURL)
         }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse, (200..<300).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
         
         let weather = try JSONDecoder().decode(WeatherModel.self, from: data)
         
