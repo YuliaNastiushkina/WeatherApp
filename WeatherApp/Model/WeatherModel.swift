@@ -8,8 +8,6 @@ struct WeatherModel: Decodable {
     let main: Main
     /// A list of weather conditions.
     let weather: [Weather]
-    /// Humidity in percentage.
-    let humidity: Int
     
     /// Represents main weather parameters like temperature and feels-like temperature.
     struct Main: Decodable {
@@ -17,10 +15,13 @@ struct WeatherModel: Decodable {
         let temp: Double
         /// The feels-like temperature in Celsius.
         let feelsLike: Double
+        /// Humidity in percentage.
+        let humidity: Int
         
         /// Mapping of JSON keys to the property names in Swift.
         /// This is used to map the JSON key `feels_like` to the property `feelsLike`.
         private enum CodingKeys: String, CodingKey {
+            case humidity
             case temp
             case feelsLike = "feels_like"
         }

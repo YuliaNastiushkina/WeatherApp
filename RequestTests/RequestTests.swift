@@ -1,28 +1,49 @@
-import XCTest
-
-final class RequestTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
-}
+//import XCTest
+//
+//final class RequestTests: XCTestCase {
+//    var session: URLSession!
+//    var request: Request!
+//    
+//    override func setUpWithError() throws {
+//        let config = URLSessionConfiguration.ephemeral
+//        config.protocolClasses = [MockURLProtocol.self]
+//        session = URLSession(configuration: config)
+//        
+//        request = Request(session: session)
+//        
+//        MockURLProtocol.requestHandler = { request in
+//            let json = """
+//                        {
+//                            "weather": [{"description": "clear sky"}],
+//                            "main": {
+//                                "temp": 23.5
+//                            }
+//                        }
+//                    """
+//            let data = json.data(using: .utf8)!
+//            let response = HTTPURLResponse(
+//                url: request.url!,
+//                statusCode: 200,
+//                httpVersion: nil,
+//                headerFields: nil
+//            )!
+//            return (response, data)
+//        }
+//    }
+//    
+//    override func tearDownWithError() throws {
+//        MockURLProtocol.requestHandler = nil
+//        session = nil
+//        request = nil
+//    }
+//    
+//    func testGetWeather() async throws {
+//        do {
+//            let weather = try await request.getWeather(for: "Toronto")
+//            XCTAssertEqual(weather.main.temp, 23.5)
+//            XCTAssertEqual(weather.weather.first?.description, "clear sky")
+//        } catch {
+//            XCTFail("Unexpected error: \(error)")
+//        }
+//    }
+//}
