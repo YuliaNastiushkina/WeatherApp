@@ -22,6 +22,9 @@ struct ContentView: View {
                     .font(.largeTitle)
                     .bold()
                 
+                Text(viewModel.feelsLike)
+                    .font(.title)
+                
                 Text(viewModel.description)
                     .font(.title2)
                 

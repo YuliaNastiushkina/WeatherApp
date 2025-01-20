@@ -8,6 +8,7 @@ class WeatherViewModel: ObservableObject {
     @Published var humidity: String = ""
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
+    @Published var feelsLike: String = ""
     
     private let weatherService = Request()
     
@@ -23,6 +24,7 @@ class WeatherViewModel: ObservableObject {
         do {
             let weather = try await weatherService.getWeather(for: cityName)
             temperature = "\(Int(weather.main.temp))°C"
+            feelsLike = "Feels like: \(Int(weather.main.feelsLike))°C"
             description = weather.weather.first?.description.capitalized ?? "No description"
             humidity = "Humidity: \(weather.main.humidity)%"
         } catch {
