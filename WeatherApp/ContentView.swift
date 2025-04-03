@@ -2,7 +2,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var viewModel = WeatherViewModel()
+    @StateObject private var viewModel = WeatherViewModel(networkService: URLSession.shared)
     
     var body: some View {
         VStack(spacing: 20) {

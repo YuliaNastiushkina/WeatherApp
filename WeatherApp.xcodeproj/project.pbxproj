@@ -26,7 +26,9 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Model/WeatherModel.swift,
-				RestAPI/Request/Request.swift,
+				NetworkService/Extention/URLSessionExtention.swift,
+				NetworkService/Protocols/RequestProtocol.swift,
+				NetworkService/RestAPI/Request/Request.swift,
 			);
 			target = BA5125052D3C8DC7000B0BB0 /* RequestTests */;
 		};
