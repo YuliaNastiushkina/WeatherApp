@@ -20,21 +20,27 @@ struct Request {
         
         let urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(city)&appid=\(apiKey)&units=metric"
         
-        guard let url = URL(string: urlString) else {
-            throw URLError(.badURL)
-        }
-        
-        let (data, response) = try await networkService.fetchData(from: url)
-    
-        guard let httpResponse = response as? HTTPURLResponse, (200..<300).contains(httpResponse.statusCode) else {
-            throw URLError(.badServerResponse)
-        }
-        
-        let weather = try JSONDecoder().decode(WeatherModel.self, from: data)
-        
-        return weather
+        return try await fetchAndDecode(urlString: urlString)
     }
-    //MARK: Private interface    
+    
+    //TODO: added doc comments
+    /// Fetches the city name
+    /// - Parameter query: ??
+    /// - Returns: ??
+    func searchCities(query: String) async throws -> [CitySuggestion] {
+        guard let apiKey = getAPIKey() else {
+            throw NSError(domain: "WeatherApp", code: -1, userInfo: [NSLocalizedDescriptionKey: "API Key is missing"])
+        }
+        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            return []
+        }
+        
+        let urlString = "https://api.openweathermap.org/geo/1.0/direct?q=\(encodedQuery)&limit=5&appid=\(apiKey)"
+        
+        return try await fetchAndDecode(urlString: urlString)
+    }
+    
+    //MARK: Private interface
     private let networkService: RequestProtocol
     
     init(networkService: RequestProtocol) {
@@ -50,5 +56,21 @@ struct Request {
             return apiKey
         }
         return nil
+    }
+    //TODO: added doc comments
+    private func fetchAndDecode<T: Decodable>(urlString: String) async throws -> T {
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+
+        let (data, response) = try await networkService.fetchData(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200..<300).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+
+        let decoded = try JSONDecoder().decode(T.self, from: data)
+        return decoded
     }
 }

@@ -6,14 +6,8 @@ struct ContentView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            TextField("Enter city", text: $viewModel.cityName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-                .onSubmit {
-                    Task {
-                        await viewModel.fetchWeather()
-                    }
-                }
+            
+            SearchView(viewModel: viewModel)
             
             if viewModel.isLoading {
                 ProgressView()
@@ -36,16 +30,6 @@ struct ContentView: View {
                 Text(errorMessage)
                     .foregroundColor(.red)
             }
-            
-            Button("Get Weather") {
-                Task {
-                    await viewModel.fetchWeather()
-                }
-            }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
         }
         .padding()
     }

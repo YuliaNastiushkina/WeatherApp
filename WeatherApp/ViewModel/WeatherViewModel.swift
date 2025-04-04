@@ -10,6 +10,7 @@ class WeatherViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var feelsLike: String = ""
+    @Published var citySuggestions: [String] = []
     
     /// Fetches weather data for the specified city.
     ///
@@ -40,6 +41,27 @@ class WeatherViewModel: ObservableObject {
         }
         
         isLoading = false
+    }
+    //TODO: add doc comments
+    func searchCities() async {
+        guard cityName.count >= 2 else {
+            citySuggestions = []
+            return
+        }
+        
+        do {
+            let result = try await weatherService.searchCities(query: cityName)
+            print("Received cities: \(result)")
+            
+            citySuggestions = result
+                .filter { $0.name.lowercased().hasPrefix(cityName.lowercased()) && $0.name.count > 2 }
+                .map{ "\($0.name), \($0.country)" }
+            
+            citySuggestions = Array(Set(citySuggestions))
+            print("Filtered suggestions: \(citySuggestions)")
+        } catch {
+            citySuggestions = []
+        }
     }
     
     //MARK: Private interface
