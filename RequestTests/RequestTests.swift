@@ -1,4 +1,5 @@
 import XCTest
+@testable import WeatherApp
 
 final class RequestTests: XCTestCase {
     var mockSession: MockURLSession!
@@ -7,7 +8,7 @@ final class RequestTests: XCTestCase {
     override func setUp() {
         super.setUp()
         mockSession = MockURLSession()
-        request = Request(networkService: mockSession)
+        request = Request(networkService: mockSession as! RequestProtocol)
     }
     
     override func tearDown() {
