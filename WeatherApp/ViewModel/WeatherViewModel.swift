@@ -12,6 +12,12 @@ class WeatherViewModel: ObservableObject {
     @Published var feelsLike: String = ""
     @Published var citySuggestions: [String] = []
     
+    var hasWeatherData: Bool {
+        !temperature.isEmpty &&
+        !feelsLike.isEmpty &&
+        !description.isEmpty &&
+        !humidity.isEmpty
+    }
     /// Fetches weather data for the specified city.
     ///
     /// - If `cityName` is empty, sets `errorMessage` to `"Please enter a city name"` and exits.

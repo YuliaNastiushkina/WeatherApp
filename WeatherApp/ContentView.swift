@@ -5,22 +5,39 @@ struct ContentView: View {
     @StateObject private var viewModel = WeatherViewModel(networkService: URLSession.shared)
     
     var body: some View {
-        VStack(spacing: 20) {
+        ZStack {
+            Color.blue.opacity(0.1)
+                .ignoresSafeArea()
             
-            SearchView(viewModel: viewModel)
-            
-            if viewModel.isLoading {
-                ProgressView()
-            } else {
-                WeatherView(viewModel: viewModel)
+            VStack(alignment: .leading) {
+                SearchView(viewModel: viewModel)
+                
+                Spacer()
             }
+            .padding()
             
-            if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
+            if viewModel.hasWeatherData {
+                VStack {
+                    if viewModel.isLoading {
+                        ProgressView()
+                    } else if viewModel.hasWeatherData {
+                        WeatherView(viewModel: viewModel)
+                    }
+                    
+                    if let errorMessage = viewModel.errorMessage {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                    }
+                }
+                .padding()
+            } else {
+                Image(systemName: "cloud.rainbow.crop.fill")
+                    .resizable()
+                    .frame(width: 80, height: 80)
+                    .font(.largeTitle)
+                    .foregroundStyle(.yellow)
             }
         }
-        .padding()
     }
 }
 
