@@ -29,6 +29,13 @@
 			);
 			target = BA5124C82D3C558A000B0BB0 /* WeatherApp */;
 		};
+		BA8FBA8E2DA058D400E0A42B /* Exceptions for "WeatherAppTests" folder in "RequestTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MockURLSession.swift,
+			);
+			target = BA5125052D3C8DC7000B0BB0 /* RequestTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -41,6 +48,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				BA5125152D3D985F000B0BB0 /* Exceptions for "WeatherAppTests" folder in "WeatherApp" target */,
+				BA8FBA8E2DA058D400E0A42B /* Exceptions for "WeatherAppTests" folder in "RequestTests" target */,
 			);
 			path = WeatherAppTests;
 			sourceTree = "<group>";

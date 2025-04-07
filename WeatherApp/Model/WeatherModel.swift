@@ -1,7 +1,7 @@
 import Foundation
 
 /// Describes the overall structure of the weather data model.
-struct WeatherModel: Decodable {
+struct WeatherModel: Codable {
     /// The name of the city.
     let name: String
     /// Main weather data, such as temperature and feels-like temperature.
@@ -10,7 +10,7 @@ struct WeatherModel: Decodable {
     let weather: [Weather]
     
     /// Represents main weather parameters like temperature and feels-like temperature.
-    struct Main: Decodable {
+    struct Main: Codable {
         /// The current temperature in Celsius.
         let temp: Double
         /// The feels-like temperature in Celsius.
@@ -28,7 +28,7 @@ struct WeatherModel: Decodable {
     }
     
     /// Provides weather conditions, such as the main condition and description.
-    struct Weather: Decodable {
+    struct Weather: Codable {
         /// The main weather condition (e.g., "Clear", "Rain").
         let main: String
         /// A detailed description of the current weather condition (e.g., "clear sky", "light rain").

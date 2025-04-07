@@ -12,18 +12,7 @@ struct ContentView: View {
             if viewModel.isLoading {
                 ProgressView()
             } else {
-                Text(viewModel.temperature)
-                    .font(.largeTitle)
-                    .bold()
-                
-                Text(viewModel.feelsLike)
-                    .font(.title)
-                
-                Text(viewModel.description)
-                    .font(.title2)
-                
-                Text(viewModel.humidity)
-                    .font(.body)
+                WeatherView(viewModel: viewModel)
             }
             
             if let errorMessage = viewModel.errorMessage {

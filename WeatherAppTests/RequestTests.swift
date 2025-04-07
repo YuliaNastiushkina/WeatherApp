@@ -8,7 +8,7 @@ final class RequestTests: XCTestCase {
     override func setUp() {
         super.setUp()
         mockSession = MockURLSession()
-        request = Request(networkService: mockSession as! RequestProtocol)
+        request = Request(networkService: mockSession!)
     }
     
     override func tearDown() {
