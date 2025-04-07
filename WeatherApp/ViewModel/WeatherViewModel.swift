@@ -11,7 +11,10 @@ class WeatherViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var feelsLike: String = ""
     @Published var citySuggestions: [String] = []
+    @Published var shouldShowWeather: Bool = false
     
+    /// Indicates whether the weather data has been received and is ready to display.
+    /// Returns `true` if all required fields are non-empty.
     var hasWeatherData: Bool {
         !temperature.isEmpty &&
         !feelsLike.isEmpty &&
@@ -45,7 +48,7 @@ class WeatherViewModel: ObservableObject {
         } catch {
             errorMessage = "Failed to fetch weather data"
         }
-        
+        shouldShowWeather = true
         isLoading = false
     }
     //TODO: add doc comments

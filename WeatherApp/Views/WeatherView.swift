@@ -2,9 +2,26 @@ import SwiftUI
 
 struct WeatherView: View {
     @ObservedObject var viewModel: WeatherViewModel
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack(alignment: .leading, spacing: rowSpacing) {
+            
+            HStack {
+                Button("Cancel") {
+                    dismiss()
+                }
+                
+                Spacer()
+                
+                Button("Add") {
+                    // TODO: Add action
+                    print("Added")
+                }
+            }
+            .font(.headline)
+            .foregroundColor(.blue.opacity(0.8))
+            
             HStack {
                 Text(viewModel.cityName)
                     .font(.largeTitle)

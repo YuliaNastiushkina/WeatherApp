@@ -20,8 +20,6 @@ struct ContentView: View {
                 VStack {
                     if viewModel.isLoading {
                         ProgressView()
-                    } else if viewModel.hasWeatherData {
-                        WeatherView(viewModel: viewModel)
                     }
                     
                     if let errorMessage = viewModel.errorMessage {
@@ -37,6 +35,9 @@ struct ContentView: View {
                     .font(.largeTitle)
                     .foregroundStyle(.yellow)
             }
+        }
+        .sheet(isPresented: $viewModel.shouldShowWeather) {
+            WeatherView(viewModel: viewModel)
         }
     }
 }
