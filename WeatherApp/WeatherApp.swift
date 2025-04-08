@@ -4,14 +4,15 @@
 //
 //  Created by Yulya on 2025-01-18.
 //
-
+import SwiftData
 import SwiftUI
 
 @main
 struct WeatherApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentViewWrapper()
         }
+        .modelContainer(for: SavedWeathersModel.self)
     }
 }
