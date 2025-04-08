@@ -18,7 +18,7 @@ struct SearchView: View {
                 }
             }
         if !viewModel.citySuggestions.isEmpty {
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: spacing) {
                 ForEach(viewModel.citySuggestions, id: \.self) { suggestion in
                     Button(action: {
                         viewModel.cityName = suggestion
@@ -28,8 +28,7 @@ struct SearchView: View {
                         }
                     }) {
                         Text(suggestion)
-                            .padding(.horizontal)
-                            .padding(.vertical, 8)
+                            .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color(.systemGray6))
                             .foregroundStyle(Color.black)
@@ -37,11 +36,15 @@ struct SearchView: View {
                 }
             }
             .background(Color.white)
-            .cornerRadius(8)
-            .shadow(radius: 4)
+            .cornerRadius(textFieldCornerRadius)
+            .shadow(radius: shadowRadius)
             .padding(.horizontal)
         }
     }
+    //MARK: Private interface
+    private let spacing: CGFloat = 0
+    private let textFieldCornerRadius: CGFloat = 10
+    private let shadowRadius: CGFloat = 5
 }
 
 #Preview {
