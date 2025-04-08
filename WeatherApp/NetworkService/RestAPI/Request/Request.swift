@@ -23,10 +23,13 @@ struct Request {
         return try await fetchAndDecode(urlString: urlString)
     }
     
-    //TODO: added doc comments
-    /// Fetches the city name
-    /// - Parameter query: ??
-    /// - Returns: ??
+    /// Fetches city name suggestions based on a search query
+    /// - Parameter query: A string containing the search query to find cities.
+    /// - Returns: An array of `CitySuggestion` objects containing city names and their respective countries.
+    /// - Throws:
+    ///     - `NSError` if the API key is missing.
+    ///     - `URLError` if there is an issue with the URL construction or fetching data.
+    ///     - `URLError(.badServerResponse)` if the server response is invalid.
     func searchCities(query: String) async throws -> [CitySuggestion] {
         guard let apiKey = getAPIKey() else {
             throw NSError(domain: "WeatherApp", code: -1, userInfo: [NSLocalizedDescriptionKey: "API Key is missing"])
@@ -57,7 +60,14 @@ struct Request {
         }
         return nil
     }
-    //TODO: added doc comments
+
+    /// Fetches data from the provided URL and decodes the response into a specified model.
+    /// - Parameter urlString: A string containing the URL to fetch data from.
+    /// - Returns: A  decoded object of type `T` where `T` is a `Decodable` model.
+    /// - Throws:
+    ///     - `URLError(.badURL)` if the URL is invalid.
+    ///     - `URLError(.badServerResponse)` if the server response is invalid.
+    ///     - Any error thrown during data fetching or decoding.
     private func fetchAndDecode<T: Decodable>(urlString: String) async throws -> T {
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)
