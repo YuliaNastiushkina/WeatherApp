@@ -1,26 +1,40 @@
 import Foundation
+import SwiftData
 
-/// Responsible for fetching and managing weather data.
+/// Responsible for managing the weather data, including fetching and displaying weather information for a specified city.
 @MainActor
-class WeatherViewModel: ObservableObject {
+class WeatherViewModel: ObservableObject, WeatherDataProtocol {
+    //MARK: Private interface
+    private let weatherService: Request?
+    
+    //MARK: Internal interface
     @Published var cityName: String = ""
     @Published var temperature: String = ""
-    @Published var description: String = ""
+    @Published var weatherDescription: String = ""
+    @Published var feelsLike: String = ""
     @Published var humidity: String = ""
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
-    @Published var feelsLike: String = ""
     @Published var citySuggestions: [String] = []
     @Published var shouldShowWeather: Bool = false
     
-    /// Indicates whether the weather data has been received and is ready to display.
-    /// Returns `true` if all required fields are non-empty.
-    var hasWeatherData: Bool {
-        !temperature.isEmpty &&
-        !feelsLike.isEmpty &&
-        !description.isEmpty &&
-        !humidity.isEmpty
+    /// Initializes the view model with a network service for fetching weather data.
+    /// - Parameter networkService: A service used to make network requests for weather data.
+    init(networkService: RequestProtocol) {
+        self.weatherService = Request(networkService: networkService)
     }
+    
+    /// Initializes the view model with a saved weather object.
+    /// - Parameter weather: A `SavedWeathersModel` containing weather data to display.
+    init(weather: SavedWeathersModel) {
+        self.weatherService = nil
+        self.cityName = weather.city
+        self.temperature = weather.temperature
+        self.weatherDescription = weather.weatherDescription
+        self.feelsLike = weather.feelsLike
+        self.humidity = weather.humidity
+    }
+    
     /// Fetches weather data for the specified city.
     ///
     /// - If `cityName` is empty, sets `errorMessage` to `"Please enter a city name"` and exits.
@@ -39,22 +53,40 @@ class WeatherViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
+        guard let weatherService = weatherService else {
+            errorMessage = "Weather service is unavailable"
+            isLoading = false
+            return
+        }
+        
         do {
             let weather = try await weatherService.getWeather(for: cityName)
             temperature = "\(Int(weather.main.temp))°C"
             feelsLike = "Feels like: \(Int(weather.main.feelsLike))°C"
-            description = weather.weather.first?.description.capitalized ?? "No description"
+            weatherDescription = weather.weather.first?.description.capitalized ?? "No description"
             humidity = "Humidity: \(weather.main.humidity)%"
+            shouldShowWeather = true
         } catch {
             errorMessage = "Failed to fetch weather data"
         }
-        shouldShowWeather = true
         isLoading = false
     }
-    //TODO: add doc comments
-    func searchCities() async {
+    
+    /// Fetches city suggestions based on the input `cityName`.
+    ///
+    /// - If `cityName` has fewer than 2 characters, clears the city suggestions.
+    /// - Uses the `weatherService` to search for cities matching the input.
+    /// - Updates `citySuggestions` with the filtered and formatted list of city names.
+    /// - On failure, sets `citySuggestions` to an empty list.
+    func searchCities() async { //TODO: Implement search for city with more than 1 word
         guard cityName.count >= 2 else {
             citySuggestions = []
+            return
+        }
+        
+        guard let weatherService = weatherService else {
+            errorMessage = "Weather service is unavailable"
+            isLoading = false
             return
         }
         
@@ -71,12 +103,5 @@ class WeatherViewModel: ObservableObject {
         } catch {
             citySuggestions = []
         }
-    }
-    
-    //MARK: Private interface
-    private let weatherService: Request
-    
-    init(networkService: RequestProtocol) {
-        self.weatherService = Request(networkService: networkService)
     }
 }

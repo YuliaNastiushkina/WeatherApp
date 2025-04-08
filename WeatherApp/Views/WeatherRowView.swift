@@ -1,36 +1,44 @@
 import SwiftUI
 
 struct WeatherRowView: View {
-    var viewModel: WeatherViewModel
+    var viewModel: WeatherDataProtocol
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(viewModel.cityName)
-                .font(.title)
-                .bold()
-            
-            Text(viewModel.temperature)
-                .font(.title2)
-            
-            Text(viewModel.description)
-                .font(.body)
-            
+        VStack(alignment: .leading, spacing: rowSpacing) {
             HStack {
-                Text(viewModel.humidity)
-                    .font(.subheadline)
+                Text(viewModel.cityName)
+                    .font(.largeTitle)
+                    .bold()
                 
                 Spacer()
                 
-                Text(viewModel.feelsLike)
-                    .font(.subheadline)
+                Text(viewModel.temperature)
+                    .font(.largeTitle)
+                    .bold()
+            }
+            .shadow(color: .gray, radius: shadowRadius)
+            
+            VStack(alignment: .leading) {
+                Text(viewModel.weatherDescription)
+                    .font(.title2)
+                
+                HStack {
+                    Text(viewModel.humidity)
+                        .font(.title3)
+                    
+                    Spacer()
+                    
+                    Text(viewModel.feelsLike)
+                        .font(.title3)
+                }
             }
         }
         .padding()
-        .background(RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.white.opacity(0.8))
-                        .shadow(radius: 5))
-        .padding(.bottom, 10)
     }
+    
+//MARK: Private interface
+private let shadowRadius: CGFloat = 2
+private let rowSpacing: CGFloat = 20
 }
 
 #Preview {
@@ -57,7 +65,7 @@ var previewViewModel: WeatherViewModel {
     viewModel.cityName = "Toronto"
     viewModel.temperature = "10°C"
     viewModel.feelsLike = "Feels like: 8°C"
-    viewModel.description = "Clear sky"
+    viewModel.weatherDescription = "Clear sky"
     viewModel.humidity = "Humidity: 78%"
     
     return viewModel

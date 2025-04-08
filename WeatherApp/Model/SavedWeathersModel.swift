@@ -3,7 +3,9 @@ import SwiftData
 
 /// A model representing saved weather data for a specific city.
 @Model
-class SavedWeatherModel {
+class SavedWeathersModel: WeatherDataProtocol {
+    var cityName: String { city }
+    
     /// The name of the city.
     var city: String
     /// The current temperature in Celsius.
